@@ -34,7 +34,10 @@ describe('RegisterUser Function Test', () => {
     const createdUser = {
       id: new mongoose.Types.ObjectId().toString(),
       name: req.body.name,
-      email: req.body.email
+      email: req.body.email,
+      role: 'student',
+      university: '',
+      address: ''
     };
 
     // Stub User.create to return the createdUser
@@ -70,6 +73,9 @@ describe('RegisterUser Function Test', () => {
     const responseData = res.json.firstCall.args[0];
     expect(responseData.name).to.equal(createdUser.name);
     expect(responseData.email).to.equal(createdUser.email);
+    expect(responseData.role).to.equal(createdUser.role);
+    expect(responseData.university).to.equal(createdUser.university);
+    expect(responseData.address).to.equal(createdUser.address);
     expect(responseData).to.have.property('token');
   });
 
@@ -138,7 +144,10 @@ describe('Login Function Test', () => {
       id: new mongoose.Types.ObjectId().toString(),
       name: "Yoonjin",
       email: "yoonjin@test.com",
-      password: "hashedpassword"
+      password: "hashedpassword",
+      role: "student",
+      university: "QUT",
+      address: "Brisbane"
     };
 
     // Stub User.findOne to return mock user
@@ -167,12 +176,15 @@ describe('Login Function Test', () => {
     expect(compareStub.firstCall.args[0]).to.equal(req.body.password);
     expect(compareStub.firstCall.args[1]).to.equal(user.password);
 
-    expect(res.status.called).to.be.false; // No error status should be set
+    expect(res.status.called).to.be.false;
     expect(res.json.calledOnce).to.be.true;
 
     const responseData = res.json.firstCall.args[0];
     expect(responseData.name).to.equal(user.name);
     expect(responseData.email).to.equal(user.email);
+    expect(responseData.role).to.equal(user.role);
+    expect(responseData.university).to.equal(user.university);
+    expect(responseData.address).to.equal(user.address);
     expect(responseData).to.have.property('token');
   });
 
@@ -182,7 +194,10 @@ describe('Login Function Test', () => {
       id: new mongoose.Types.ObjectId().toString(),
       name: "Yoonjin",
       email: "yoonjin@test.com",
-      password: "hashedpassword"
+      password: "hashedpassword",
+      role: "student",
+      university: "QUT",
+      address: "Brisbane"
     });
 
     // Stub bcrypt.compare to return false
@@ -335,9 +350,10 @@ describe('UpdateUserProfile Function Test', () => {
       id: userId.toString(),
       name: "Old Name",
       email: "old@test.com",
+      role: "student",
       university: "Old University",
       address: "Old Address",
-      save: sinon.stub().resolvesThis(), // Mock save method
+      save: sinon.stub().resolvesThis(),
     };
 
     // Stub User.findById to return mock user
@@ -366,12 +382,13 @@ describe('UpdateUserProfile Function Test', () => {
     expect(existingUser.email).to.equal("new@test.com");
     expect(existingUser.university).to.equal("QUT");
     expect(existingUser.address).to.equal("Brisbane");
-    expect(res.status.called).to.be.false; // No error status should be set
+    expect(res.status.called).to.be.false;
     expect(res.json.calledOnce).to.be.true;
 
     const responseData = res.json.firstCall.args[0];
     expect(responseData.name).to.equal("New Name");
     expect(responseData.email).to.equal("new@test.com");
+    expect(responseData.role).to.equal("student");
     expect(responseData.university).to.equal("QUT");
     expect(responseData.address).to.equal("Brisbane");
     expect(responseData).to.have.property('token');

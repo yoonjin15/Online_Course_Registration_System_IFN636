@@ -14,6 +14,10 @@ chai.use(chaiHttp);
 let server;
 let port;
 
+afterEach(() => {
+  sinon.restore();
+});
+
 
 describe('RegisterUser Function Test', () => {
 
@@ -46,28 +50,32 @@ describe('RegisterUser Function Test', () => {
     await registerUser(req, res);
 
     // Assertions
-    expect(findOneStub.calledOnceWith({ email: req.body.email })).to.be.true;
-    expect(createStub.calledOnceWith({
+    expect(findOneStub.calledOnce).to.be.true;
+    expect(findOneStub.firstCall.args[0]).to.deep.equal({ email: req.body.email });
+
+    expect(createStub.calledOnce).to.be.true;
+    expect(createStub.firstCall.args[0]).to.deep.equal({
       name: req.body.name,
       email: req.body.email,
-      password: req.body.password
-    })).to.be.true;
-    expect(res.status.calledWith(201)).to.be.true;
+      password: req.body.password,
+      role: 'student',
+      university: '',
+      address: ''
+    });
+
+    expect(res.status.calledOnce).to.be.true;
+    expect(res.status.firstCall.args[0]).to.equal(201);
     expect(res.json.calledOnce).to.be.true;
 
     const responseData = res.json.firstCall.args[0];
     expect(responseData.name).to.equal(createdUser.name);
     expect(responseData.email).to.equal(createdUser.email);
     expect(responseData).to.have.property('token');
-
-    // Restore stubbed methods
-    findOneStub.restore();
-    createStub.restore();
   });
 
   it('should return 400 if user already exists', async () => {
     // Stub User.findOne to return an existing user
-    const findOneStub = sinon.stub(User, 'findOne').resolves({
+    sinon.stub(User, 'findOne').resolves({
       id: new mongoose.Types.ObjectId().toString(),
       name: "Existing User",
       email: "existing@test.com"
@@ -88,16 +96,15 @@ describe('RegisterUser Function Test', () => {
     await registerUser(req, res);
 
     // Assertions
-    expect(res.status.calledWith(400)).to.be.true;
-    expect(res.json.calledWith({ message: 'User already exists' })).to.be.true;
-
-    // Restore stubbed methods
-    findOneStub.restore();
+    expect(res.status.calledOnce).to.be.true;
+    expect(res.status.firstCall.args[0]).to.equal(400);
+    expect(res.json.calledOnce).to.be.true;
+    expect(res.json.firstCall.args[0]).to.deep.equal({ message: 'User already exists' });
   });
 
   it('should return 500 if an error occurs', async () => {
     // Stub User.findOne to throw an error
-    const findOneStub = sinon.stub(User, 'findOne').throws(new Error('DB Error'));
+    sinon.stub(User, 'findOne').throws(new Error('DB Error'));
 
     // Mock request data
     const req = {
@@ -114,11 +121,10 @@ describe('RegisterUser Function Test', () => {
     await registerUser(req, res);
 
     // Assertions
-    expect(res.status.calledWith(500)).to.be.true;
-    expect(res.json.calledWithMatch({ message: 'DB Error' })).to.be.true;
-
-    // Restore stubbed methods
-    findOneStub.restore();
+    expect(res.status.calledOnce).to.be.true;
+    expect(res.status.firstCall.args[0]).to.equal(500);
+    expect(res.json.calledOnce).to.be.true;
+    expect(res.json.firstCall.args[0]).to.deep.include({ message: 'DB Error' });
   });
 
 });
@@ -154,8 +160,13 @@ describe('Login Function Test', () => {
     await loginUser(req, res);
 
     // Assertions
-    expect(findOneStub.calledOnceWith({ email: req.body.email })).to.be.true;
-    expect(compareStub.calledOnceWith(req.body.password, user.password)).to.be.true;
+    expect(findOneStub.calledOnce).to.be.true;
+    expect(findOneStub.firstCall.args[0]).to.deep.equal({ email: req.body.email });
+
+    expect(compareStub.calledOnce).to.be.true;
+    expect(compareStub.firstCall.args[0]).to.equal(req.body.password);
+    expect(compareStub.firstCall.args[1]).to.equal(user.password);
+
     expect(res.status.called).to.be.false; // No error status should be set
     expect(res.json.calledOnce).to.be.true;
 
@@ -163,15 +174,11 @@ describe('Login Function Test', () => {
     expect(responseData.name).to.equal(user.name);
     expect(responseData.email).to.equal(user.email);
     expect(responseData).to.have.property('token');
-
-    // Restore stubbed methods
-    findOneStub.restore();
-    compareStub.restore();
   });
 
   it('should return 401 if email or password is invalid', async () => {
     // Stub User.findOne to return mock user
-    const findOneStub = sinon.stub(User, 'findOne').resolves({
+    sinon.stub(User, 'findOne').resolves({
       id: new mongoose.Types.ObjectId().toString(),
       name: "Yoonjin",
       email: "yoonjin@test.com",
@@ -179,7 +186,7 @@ describe('Login Function Test', () => {
     });
 
     // Stub bcrypt.compare to return false
-    const compareStub = sinon.stub(bcrypt, 'compare').resolves(false);
+    sinon.stub(bcrypt, 'compare').resolves(false);
 
     // Mock request & response
     const req = {
@@ -194,17 +201,15 @@ describe('Login Function Test', () => {
     await loginUser(req, res);
 
     // Assertions
-    expect(res.status.calledWith(401)).to.be.true;
-    expect(res.json.calledWith({ message: 'Invalid email or password' })).to.be.true;
-
-    // Restore stubbed methods
-    findOneStub.restore();
-    compareStub.restore();
+    expect(res.status.calledOnce).to.be.true;
+    expect(res.status.firstCall.args[0]).to.equal(401);
+    expect(res.json.calledOnce).to.be.true;
+    expect(res.json.firstCall.args[0]).to.deep.equal({ message: 'Invalid email or password' });
   });
 
   it('should return 500 on error', async () => {
     // Stub User.findOne to throw an error
-    const findOneStub = sinon.stub(User, 'findOne').throws(new Error('DB Error'));
+    sinon.stub(User, 'findOne').throws(new Error('DB Error'));
 
     // Mock request & response
     const req = {
@@ -219,15 +224,13 @@ describe('Login Function Test', () => {
     await loginUser(req, res);
 
     // Assertions
-    expect(res.status.calledWith(500)).to.be.true;
-    expect(res.json.calledWithMatch({ message: 'DB Error' })).to.be.true;
-
-    // Restore stubbed methods
-    findOneStub.restore();
+    expect(res.status.calledOnce).to.be.true;
+    expect(res.status.firstCall.args[0]).to.equal(500);
+    expect(res.json.calledOnce).to.be.true;
+    expect(res.json.firstCall.args[0]).to.deep.include({ message: 'DB Error' });
   });
 
 });
-
 
 
 describe('GetProfile Function Test', () => {
@@ -241,6 +244,7 @@ describe('GetProfile Function Test', () => {
       _id: userId,
       name: "Yoonjin",
       email: "yoonjin@test.com",
+      role: "student",
       university: "QUT",
       address: "Brisbane"
     };
@@ -259,22 +263,25 @@ describe('GetProfile Function Test', () => {
     await getProfile(req, res);
 
     // Assertions
-    expect(findByIdStub.calledOnceWith(req.user.id)).to.be.true;
-    expect(res.status.calledWith(200)).to.be.true;
-    expect(res.json.calledWith({
+    expect(findByIdStub.calledOnce).to.be.true;
+    expect(findByIdStub.firstCall.args[0]).to.equal(req.user.id);
+
+    expect(res.status.calledOnce).to.be.true;
+    expect(res.status.firstCall.args[0]).to.equal(200);
+
+    expect(res.json.calledOnce).to.be.true;
+    expect(res.json.firstCall.args[0]).to.deep.equal({
       name: user.name,
       email: user.email,
+      role: user.role,
       university: user.university,
       address: user.address
-    })).to.be.true;
-
-    // Restore stubbed methods
-    findByIdStub.restore();
+    });
   });
 
   it('should return 404 if user is not found', async () => {
     // Stub User.findById to return null
-    const findByIdStub = sinon.stub(User, 'findById').resolves(null);
+    sinon.stub(User, 'findById').resolves(null);
 
     // Mock request & response
     const req = { user: { id: new mongoose.Types.ObjectId() } };
@@ -287,16 +294,15 @@ describe('GetProfile Function Test', () => {
     await getProfile(req, res);
 
     // Assertions
-    expect(res.status.calledWith(404)).to.be.true;
-    expect(res.json.calledWith({ message: 'User not found' })).to.be.true;
-
-    // Restore stubbed methods
-    findByIdStub.restore();
+    expect(res.status.calledOnce).to.be.true;
+    expect(res.status.firstCall.args[0]).to.equal(404);
+    expect(res.json.calledOnce).to.be.true;
+    expect(res.json.firstCall.args[0]).to.deep.equal({ message: 'User not found' });
   });
 
   it('should return 500 on error', async () => {
     // Stub User.findById to throw an error
-    const findByIdStub = sinon.stub(User, 'findById').throws(new Error('DB Error'));
+    sinon.stub(User, 'findById').throws(new Error('DB Error'));
 
     // Mock request & response
     const req = { user: { id: new mongoose.Types.ObjectId() } };
@@ -309,15 +315,14 @@ describe('GetProfile Function Test', () => {
     await getProfile(req, res);
 
     // Assertions
-    expect(res.status.calledWith(500)).to.be.true;
-    expect(res.json.calledWithMatch({ message: 'Server error' })).to.be.true;
-
-    // Restore stubbed methods
-    findByIdStub.restore();
+    expect(res.status.calledOnce).to.be.true;
+    expect(res.status.firstCall.args[0]).to.equal(500);
+    expect(res.json.calledOnce).to.be.true;
+    expect(res.json.firstCall.args[0]).to.deep.include({ message: 'Server error' });
+    expect(res.json.firstCall.args[0]).to.deep.include({ error: 'DB Error' });
   });
 
 });
-
 
 
 describe('UpdateUserProfile Function Test', () => {
@@ -370,13 +375,10 @@ describe('UpdateUserProfile Function Test', () => {
     expect(responseData.university).to.equal("QUT");
     expect(responseData.address).to.equal("Brisbane");
     expect(responseData).to.have.property('token');
-
-    // Restore stubbed methods
-    findByIdStub.restore();
   });
 
   it('should return 404 if user is not found', async () => {
-    const findByIdStub = sinon.stub(User, 'findById').resolves(null);
+    sinon.stub(User, 'findById').resolves(null);
 
     const req = { user: { id: new mongoose.Types.ObjectId() }, body: {} };
     const res = {
@@ -386,14 +388,14 @@ describe('UpdateUserProfile Function Test', () => {
 
     await updateUserProfile(req, res);
 
-    expect(res.status.calledWith(404)).to.be.true;
-    expect(res.json.calledWith({ message: 'User not found' })).to.be.true;
-
-    findByIdStub.restore();
+    expect(res.status.calledOnce).to.be.true;
+    expect(res.status.firstCall.args[0]).to.equal(404);
+    expect(res.json.calledOnce).to.be.true;
+    expect(res.json.firstCall.args[0]).to.deep.equal({ message: 'User not found' });
   });
 
   it('should return 500 on error', async () => {
-    const findByIdStub = sinon.stub(User, 'findById').throws(new Error('DB Error'));
+    sinon.stub(User, 'findById').throws(new Error('DB Error'));
 
     const req = { user: { id: new mongoose.Types.ObjectId() }, body: {} };
     const res = {
@@ -403,10 +405,10 @@ describe('UpdateUserProfile Function Test', () => {
 
     await updateUserProfile(req, res);
 
-    expect(res.status.calledWith(500)).to.be.true;
-    expect(res.json.calledWithMatch({ message: 'DB Error' })).to.be.true;
-
-    findByIdStub.restore();
+    expect(res.status.calledOnce).to.be.true;
+    expect(res.status.firstCall.args[0]).to.equal(500);
+    expect(res.json.calledOnce).to.be.true;
+    expect(res.json.firstCall.args[0]).to.deep.include({ message: 'DB Error' });
   });
 
 });

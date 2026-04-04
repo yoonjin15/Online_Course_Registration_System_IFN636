@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../axiosConfig';
 import { useAuth } from '../context/AuthContext';
 import CourseList from '../components/CourseList';
 
 const Courses = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [courses, setCourses] = useState([]);
   const [search, setSearch] = useState('');
 
@@ -42,7 +44,18 @@ const Courses = () => {
   return (
     <div className="w-full px-6 pb-10">
       <div className="bg-slate-100 rounded-b-xl p-6 shadow-sm">
-        <h2 className="text-3xl font-medium mb-6">Course List</h2>
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-3xl font-medium">Course List</h2>
+
+          {user?.role === 'admin' && (
+            <button
+              onClick={() => navigate('/admin/courses/new')}
+              className="bg-sky-500 hover:bg-sky-600 text-white px-5 py-2 rounded"
+            >
+              Add Course
+            </button>
+          )}
+        </div>
 
         <input
           type="text"

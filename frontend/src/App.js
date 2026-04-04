@@ -54,6 +54,17 @@ function App() {
         />
 
         <Route
+          path="/admin/courses/new"
+          element={
+            <PrivateRoute>
+              <AppLayout>
+                <CourseEdit />
+              </AppLayout>
+            </PrivateRoute>
+          }
+        />
+
+        <Route
           path="/admin/courses/:id/edit"
           element={
             <PrivateRoute>

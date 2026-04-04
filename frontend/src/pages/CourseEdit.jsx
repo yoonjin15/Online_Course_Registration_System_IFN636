@@ -43,6 +43,9 @@ const CourseEdit = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const ok = window.confirm('Do you want update this course?');
+    if (!ok) return;
+
     try {
       await axiosInstance.put(`/api/courses/${id}`, formData, {
         headers: { Authorization: `Bearer ${user.token}` },

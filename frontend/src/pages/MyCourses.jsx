@@ -29,6 +29,9 @@ const MyCourses = () => {
   }, [user]);
 
   const handleDrop = async (enrollmentId) => {
+    const ok = window.confirm('Do you want drop this course?');
+    if (!ok) return;
+
     try {
       await axiosInstance.delete(`/api/enrollments/${enrollmentId}`, {
         headers: { Authorization: `Bearer ${user.token}` },

@@ -47,6 +47,9 @@ const CourseDetail = () => {
   }, [id, user]);
 
   const handleRegister = async () => {
+    const ok = window.confirm('Do you want register this course?');
+    if (!ok) return;
+
     try {
       const res = await axiosInstance.post(
         '/api/enrollments',
@@ -69,6 +72,9 @@ const CourseDetail = () => {
   };
 
   const handleDrop = async () => {
+    const ok = window.confirm('Do you want drop this course?');
+    if (!ok) return;
+
     try {
       await axiosInstance.delete(`/api/enrollments/${enrollmentId}`, {
         headers: { Authorization: `Bearer ${user.token}` },
@@ -85,9 +91,9 @@ const CourseDetail = () => {
       alert('Failed to drop course.');
     }
   };
-
+  
   const handleDelete = async () => {
-    const ok = window.confirm('Are you sure you want to delete this course?');
+    const ok = window.confirm('Do you want delete this course?');
     if (!ok) return;
 
     try {

@@ -3,8 +3,10 @@
 ## Overview
 This project is a full-stack web application that allows students to register for courses and manage their enrollments. The system also provides an admin interface to manage courses. It is built using the MERN stack (MongoDB, Express, React, Node.js) and follows standard software development practices including version control and CI/CD.
 
----
+## Live Application
+http://3.27.228.119
 
+---
 ## Features
 
 ### User Features
@@ -22,7 +24,17 @@ This project is a full-stack web application that allows students to register fo
 - Manage course capacity
 
 ---
+## System Flow
 
+### Student
+- Login → View Courses → Course Detail → Register/Drop
+- View enrolled courses in "My Courses"
+
+### Admin
+- Login → View Courses → Add/Edit/Delete Courses
+- Manage course capacity and details
+
+---
 ## Technology Stack
 - Frontend: React.js
 - Backend: Node.js, Express.js
@@ -34,7 +46,6 @@ This project is a full-stack web application that allows students to register fo
 - CI/CD: GitHub Actions
 
 ---
-
 ## Project Structure
 ```
 project-root/
@@ -66,9 +77,58 @@ project-root/
 ├── README.md
 ```
 
+---
+## Setup Instructions
+To run this project locally, follow these steps:
+
+### 1. Clone the repository
+```
+git clone https://github.com/yoonjin15/Online_Course_Registration_System_IFN636.git
+cd Online_Course_Registration_System_IFN636
+```
+
+### 2. Install dependencies
+```
+npm run install-all
+```
+
+### 3. Environment Variables (Backend)
+Create a `.env` file inside the backend folder:
+```
+MONGO_URI=<your_mongodb_connection_string>
+JWT_SECRET=<your_secret_key>
+PORT=5001
+```
+
+### 4. Run the application
+Development mode:
+```
+npm run dev
+```
+
+Production mode:
+```
+npm start
+```
 
 ---
+## Access the application
+- Local: http://localhost:3000  
+- Deployed: http://3.27.228.119
 
+---
+## Test Credentials
+You can use the following accounts to access the system:
+
+### Student Account
+Email: student_test@qut.edu.au  
+Password: qwer1234  
+
+### Admin Account
+Email: admin_test@qut.edu.au  
+Password: qwer1234     
+
+---
 ## Running Tests
 Run backend tests using:
 ```
@@ -82,7 +142,6 @@ This will execute all unit tests for:
 - Enrollment Controller
 
 ---
-
 ## CI/CD
 This project uses GitHub Actions for continuous integration and deployment.
 
@@ -98,29 +157,13 @@ Workflow file:
 ```
 
 ---
-
-## Test Credentials
-You can use the following accounts to access the system:
-
-### Student Account
-Email: student_test@qut.edu.au  
-Password: qwer1234  
-
-### Admin Account
-Email: admin_test@qut.edu.au  
-Password: qwer1234   
-
----
-
 ## Notes
 - Ensure MongoDB is properly connected (e.g., MongoDB Atlas)
 - Environment variables must be correctly configured
 - The system follows REST API design and MVC architecture
 
 ---
-
 ## Author
-
 Yoonjin Ahn
 
 

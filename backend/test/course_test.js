@@ -102,7 +102,7 @@ describe('AddCourse Function Test', () => {
 });
 
 
-describe('Update Function Test', () => {
+describe('Update Course Function Test', () => {
 
   it('should update course successfully', async () => {
     // Mock course data

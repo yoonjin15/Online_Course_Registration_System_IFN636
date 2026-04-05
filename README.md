@@ -1,24 +1,139 @@
+# Online Course Registration System
 
-**Assessment 1.2 (Total Marks **20**)**
+## Overview
+This project is a full-stack web application that allows students to register for courses and manage their enrollments. The system also provides an admin interface to manage courses. It is built using the MERN stack (MongoDB, Express, React, Node.js) and follows standard software development practices including version control and CI/CD.
 
-Assignment: **Software requirements analysis and design (**Full-Stack CRUD Application Development with DevOps Practices**)**
+---
+
+## Features
+
+### User Features
+- User registration and login (authentication with JWT)
+- View available courses
+- Register for a course
+- Drop a course
+- View enrolled courses
+- Update user profile
+
+### Admin Features
+- Create new courses
+- Update course details
+- Delete courses
+- Manage course capacity
+
+---
+
+## Technology Stack
+
+- Frontend: React.js
+- Backend: Node.js, Express.js
+- Database: MongoDB (Mongoose)
+- Authentication: JSON Web Token (JWT)
+- Testing: Mocha, Chai, Sinon
+- Version Control: GitHub
+- Deployment: AWS EC2
+- CI/CD: GitHub Actions
+
+---
+
+## Project Structure
+project-root/
+├── backend/
+│ ├── controllers/
+│ ├── models/
+│ ├── routes/
+│ ├── test/
+│ └── server.js
+├── frontend/
+│ ├── src/
+│ └── public/
+├── .github/workflows/
+├── README.md
 
 
 ---
 
-**Objective**
+## Setup Instructions
 
-For this assessment, you have already been assigned a project. Your task is to develop a system that implements CRUD (Create, Read, Update, Delete) operations based on the selected project. The system should include both a user panel and an admin panel. Depending on the nature of your chosen project, you may decide how many CRUD operations are required to support the functionality of the system. You have been provided with a starter project that includes user authentication using Node.js, React.js, and MongoDB, your should extend this application based on your assigned project requirements. Ensure that the implemented features are appropriate and meaningful for your selected project. Your project should include the following:
-In this assignment you will complete the following tasks:
+### 1. Clone the repository
+git clone <your-repository-url>
+cd <your-project-folder>
 
-* **Basic Version Control using GitHub**
-* **Development, CI/CD Integration for Automated Deployment**
-* **Project report**
+### 2. Install dependencies
+npm run install-all
 
- 
+
+### 3. Environment Variables (Backend)
+Create a `.env` file in the backend folder and add:
+
+MONGO_URI=your_mongodb_connection_string
+JWT_SECRET=your_secret_key
+PORT=5001
+
+### 4. Run the application
+Development mode:
+npm run dev
+
+Production mode:
+npm start
+
 ---
 
+## Running Tests
+Run backend tests using:
+cd backend
+npm test
+
+This will execute all unit tests for:
+- Auth Controller
+- Course Controller
+- Enrollment Controller
+
+---
+
+## CI/CD
+
+This project uses GitHub Actions for continuous integration and deployment.
+
+The CI/CD pipeline performs:
+- Dependency installation
+- Backend testing
+- Frontend build
+- Deployment on AWS EC2 using PM2
+
+Workflow file:
+.github/workflows/ci.yml
+
+
+---
+
+## Test Credentials
+
+You can use the following accounts to access the system:
+
+### Student Account
+Email: test@student.com  
+Password: 123456  
+
+### Admin Account
+Email: admin@test.com  
+Password: 123456  
+
+---
+
+## Notes
+
+- Ensure MongoDB is running or properly connected via cloud (e.g. MongoDB Atlas)
+- Ensure environment variables are correctly configured
+- The system follows REST API design and MVC architecture
+
+---
+
+## Author
+
+Yoonjin Ahn
+
+
+---
+## Starter Project
 **GitHub link of the starter project: **[https://github.com/nahaQUT/sampleapp_IFQ636.git](https://github.com/nahaQUT/sampleapp_IFQ636.git)
-
----
-

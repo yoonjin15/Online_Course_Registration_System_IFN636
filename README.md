@@ -24,7 +24,6 @@ This project is a full-stack web application that allows students to register fo
 ---
 
 ## Technology Stack
-
 - Frontend: React.js
 - Backend: Node.js, Express.js
 - Database: MongoDB (Mongoose)
@@ -37,52 +36,45 @@ This project is a full-stack web application that allows students to register fo
 ---
 
 ## Project Structure
+```
 project-root/
+├── .github/workflows/
+│ └── ci.yml
 ├── backend/
+│ ├── config/
 │ ├── controllers/
+│ ├── middleware/
 │ ├── models/
 │ ├── routes/
 │ ├── test/
-│ └── server.js
+│ ├── .env
+│ ├── .env.example
+│ ├── server.js
+│ └── package.json
 ├── frontend/
+│ ├── public/
 │ ├── src/
-│ └── public/
-├── .github/workflows/
+│ │ ├── components/
+│ │ ├── context/
+│ │ ├── pages/
+│ │ ├── App.js
+│ │ ├── axiosConfig.jsx
+│ │ ├── index.js
+│ │ └── index.css
+│ ├── tailwind.config.js
+│ └── package.json
 ├── README.md
+```
 
-
----
-
-## Setup Instructions
-
-### 1. Clone the repository
-git clone <your-repository-url>
-cd <your-project-folder>
-
-### 2. Install dependencies
-npm run install-all
-
-
-### 3. Environment Variables (Backend)
-Create a `.env` file in the backend folder and add:
-
-MONGO_URI=your_mongodb_connection_string
-JWT_SECRET=your_secret_key
-PORT=5001
-
-### 4. Run the application
-Development mode:
-npm run dev
-
-Production mode:
-npm start
 
 ---
 
 ## Running Tests
 Run backend tests using:
+```
 cd backend
 npm test
+```
 
 This will execute all unit tests for:
 - Auth Controller
@@ -92,7 +84,6 @@ This will execute all unit tests for:
 ---
 
 ## CI/CD
-
 This project uses GitHub Actions for continuous integration and deployment.
 
 The CI/CD pipeline performs:
@@ -102,29 +93,28 @@ The CI/CD pipeline performs:
 - Deployment on AWS EC2 using PM2
 
 Workflow file:
+```
 .github/workflows/ci.yml
-
+```
 
 ---
 
 ## Test Credentials
-
 You can use the following accounts to access the system:
 
 ### Student Account
-Email: test@student.com  
-Password: 123456  
+Email: student_test@qut.edu.au  
+Password: qwer1234  
 
 ### Admin Account
-Email: admin@test.com  
-Password: 123456  
+Email: admin_test@qut.edu.au  
+Password: qwer1234   
 
 ---
 
 ## Notes
-
-- Ensure MongoDB is running or properly connected via cloud (e.g. MongoDB Atlas)
-- Ensure environment variables are correctly configured
+- Ensure MongoDB is properly connected (e.g., MongoDB Atlas)
+- Environment variables must be correctly configured
 - The system follows REST API design and MVC architecture
 
 ---
@@ -136,4 +126,4 @@ Yoonjin Ahn
 
 ---
 ## Starter Project
-**GitHub link of the starter project: **[https://github.com/nahaQUT/sampleapp_IFQ636.git](https://github.com/nahaQUT/sampleapp_IFQ636.git)
+GitHub repository: https://github.com/nahaQUT/sampleapp_IFQ636.git

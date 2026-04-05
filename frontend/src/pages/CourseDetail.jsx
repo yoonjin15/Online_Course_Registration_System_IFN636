@@ -66,8 +66,16 @@ const CourseDetail = () => {
       }));
 
       alert('Course registered successfully.');
-    } catch (error) {
-      alert(error.response?.data?.message || 'Failed to register course.');
+    }catch (error) {
+      const message = error.response?.data?.message;
+
+      if (message === 'Course full') {
+        alert('Course is full. Please select another course.');
+      } else if (message === 'Already enrolled') {
+        alert('You are already enrolled in this course.');
+      } else {
+        alert(message || 'Failed to register course.');
+      }
     }
   };
 
